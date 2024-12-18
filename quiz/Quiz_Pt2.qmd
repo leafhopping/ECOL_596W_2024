@@ -18,6 +18,7 @@ Submit your answers as an html file. Name it "lastname_quiz1.html". Two submissi
 
 ```{r, message = F}
 # load packages and data 
+library(ggplot2)
 library(dslabs)
 library(dplyr)
 ```
@@ -32,11 +33,18 @@ Load the *swallows.csv* into R, call it swallows. This data frame lists results 
 You also have a separate data frame called *brightness.csv* where each row lists the plumage brightness (a sexual signal) for the female at each nest. Load this one up too.
 
 ```{r}
-# Answer
-#I used the "open data" function on R
- 
+# Answer 
+<<<<<<< HEAD
+ swallows<-read.csv("swallows.csv", header = TRUE)
+ brightness<-read.csv("brightness.csv", header = TRUE)
 
+# Google? y/n
+ n
+=======
 
+# Google? N
+
+>>>>>>> e9ed7c218b5f16ad1e5e2dd79299ac6bf25301d5
 ```
 
 #### Wrangle your data
@@ -45,23 +53,51 @@ You realize that you want to add brightness information onto your main swallows 
 
 ```{r}
 #Answer
+<<<<<<< HEAD
+comb_data <- swallows %>%
+  left_join(brightness, by = "nestbox")
+# Google? y/n
+n
+=======
 
-#I used total <- merge(brightness,swallows,by="nestbox"). I checked by saying View(total)
+
+# Google? Y
+
+>>>>>>> e9ed7c218b5f16ad1e5e2dd79299ac6bf25301d5
 ```
 
 Inspect your combined data frame. Do some sort of quick sanity check on each column to catch any obvious entry errors. Correct as necessary
 
 ```{r}
+# Answer
+<<<<<<< HEAD
+str(comb_data)
+summary(comb_data)
+colSums(is.na(comb_data))
+comb_new <- comb_data %>%
+  filter(!is.na(brightness))
+# Google y/n
+#y for NA values
+=======
+# Google N
+
+>>>>>>> e9ed7c218b5f16ad1e5e2dd79299ac6bf25301d5
 ```
 
 Create a new column called prop_fledged that contains the proportion of nestlings that fledged from each nest.
 
 ```{r}
 #Answer
+<<<<<<< HEAD
 
-#total$prop_fledged <- with(total, brood / n_fledged). I then tidied it up by removing the Na and replacing INF with )
+comb_new2 <- comb_new %>%
+  mutate(prop_fledged = ifelse(brood>0, n_fledged/brood, NA))
 
+# Google? y/n
+n
+=======
 # Google? yes. extensively. this took me 30 minutes since it wouldn't let me use the tidyverse mutate
+>>>>>>> e9ed7c218b5f16ad1e5e2dd79299ac6bf25301d5
 ```
 
 #### Explore the data
@@ -70,46 +106,57 @@ What was the mean proportion of nestlings fledged in each treatment?
 
 ```{r}
 # Answer 
+<<<<<<< HEAD
+comb_new2 %>%
+  group_by(treatment) %>%
+  summarize(mean_fledged = mean(prop_fledged, na.rm = TRUE))
 
-#the mean proportion of nestlings fledged was 1.484
 
-#I used summary(total) to get the different stats for each column, had to rename as "View(na.omit(total))" 
+# Google? y/n
+y
+=======
 
-# Google? not this time!
+# Google?
+>>>>>>> e9ed7c218b5f16ad1e5e2dd79299ac6bf25301d5
 ```
 
 Create a plot showing fledging success differences between treatments
 
 ```{r}
+<<<<<<< HEAD
 #Answer
+ggplot(comb_new2, aes(x = treatment, y = prop_fledged)) +
+  geom_boxplot() +
+  labs(x = "treatment", y = "proportion of fledged birds", 
+       title = "fledging success differences between treatments")
 
-#ggplot(na.omit(total))
-> ggplot(data = na.omit(total), mapping = aes(treatment, n_fledged))
-> ggplot() +
-+     geom_point(mapping = aes(x = treatment, y = n_fledged), data = na.omit(total)) +
-+     geom_point(
-+         mapping = aes(x = treatment, y = n_fledged), data = na.omit(total),
-+         colour = 'red', size = 3
-+     )
-> 
-# Google? no!
+# Google? y/n
+n
+=======
+# Answer
+# Google? N
+
+>>>>>>> e9ed7c218b5f16ad1e5e2dd79299ac6bf25301d5
 ```
 
 Is there any evidence that female brightness influenced fledging success? Create a plot to visually investigate this question.
 
 ```{r}
 #Answer
+<<<<<<< HEAD
+# Convert a column to numeric
+comb_new2$brightness<- as.numeric(comb_new2$brightness)
 
-#Female brightness seems to matter on both ends: darker females and lighter females along the spectrum will have more chicks that fledge, but females in the middle will see a decrease in the number of chicks successfully fledged 
+correlation <- cor.test(x = brightness, y = prop_fledged, method = "pearson")
+print(correlation)
 
-#first I made a scatterplot using this: ggplot() +
-+     geom_point(mapping = aes(x = brightness, y = n_fledged), data = na.omit(total)) +
-+     geom_point(
-+         mapping = aes(x = brightness, y = n_fledged), data = na.omit(total),
-+         colour = 'red', size = 3
+ggplot(data.frame(comb_new2), aes(x = brightness, y = prop_fledged)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
 
-#Then I added a trend line to see if it mattered by doing this: ggplot(na.omit(total), aes(x=brightness, y=n_fledged)) + geom_point() + geom_smooth()
-
-
-# Google? yes, so much!
+# Google? y/n
+n
+=======
+#Google?
+>>>>>>> e9ed7c218b5f16ad1e5e2dd79299ac6bf25301d5
 ```
